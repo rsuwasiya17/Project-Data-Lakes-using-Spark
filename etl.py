@@ -203,19 +203,6 @@ def process_log_data(spark, input_data, output_data):
     songplays_table.write.parquet(output_data + "songplays_table.parquet",
                                   partitionBy=["year", "month"], mode="overwrite")
 
-def test_parquet(spark, output_data):
-    """
-    Print first row of output data from S3 bucket
-    and number of rows.
-    
-    :param spark: spark session object
-    :param output_data: S3 bucket for output data
-    """
-    songplays_table = spark.read.parquet(output_data + "songplays_table.parquet")
-    print("Reading output data and printing row.")
-    print(songplays_table.head(1))
-    print("Number of rows: {}".format(songplays_table.count()))
-
 
 def main():
     spark = create_spark_session()
@@ -224,7 +211,6 @@ def main():
 
     process_song_data(spark, input_data, output_data)    
     process_log_data(spark, input_data, output_data)
-    test_parquet(spark, output_data)
 
 
 if __name__ == "__main__":
