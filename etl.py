@@ -83,9 +83,9 @@ def process_song_data(spark, input_data, output_data):
     artists_table.write.parquet(output_data + 'artists.parquet',mode = 'overwrite')
     
 def log_data_schema():
-"""
-Creates schema for log_data.
-"""
+    """
+    Creates schema for log_data.
+    """
     logs_schema = R([
         Fld("artist", Str()),
         Fld("auth", Str()),
@@ -162,7 +162,7 @@ def process_log_data(spark, input_data, output_data):
                              mode = "overwrite")
 
     # read in song data to use for songplays table
-    song_data = input_data + "song_data/*/*/*/*.json"
+    song_data = input_data + "song_data/A/A/A/*.json"
     song_df = spark.read.json(song_data, schema = song_data_schema())
     
     # write time table to parquet files partitioned by year and month
@@ -170,10 +170,6 @@ def process_log_data(spark, input_data, output_data):
     time_table.write.parquet(output_data + "time_table.parquet",
                              partitionBy = ["year", "month"],
                              mode = "overwrite")
-
-    # read in song data to use for songplays table
-    song_data = input_data + "song_data/*/*/*/*.json"
-    song_df = spark.read.json(song_data, schema = get_song_schema())
     
     # extract columns from joined song and log datasets to create songplays table
     song_df.createOrReplaceTempView("song_data")
@@ -208,8 +204,10 @@ def main():
     spark = create_spark_session()
     input_data = "s3a://udacity-dend/"
     output_data = "s3a://datalake-output17/"
+
     process_song_data(spark, input_data, output_data)    
     process_log_data(spark, input_data, output_data)
+
 
 if __name__ == "__main__":
     main()
